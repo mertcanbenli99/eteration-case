@@ -8,8 +8,9 @@ export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
   @Post()
-  save(@Body() createMovieDto: CreateMovieDto) {
-    return this.movieService.save(createMovieDto);
+  async save(@Body() createMovieDto: CreateMovieDto) {
+    return await this.movieService.save(createMovieDto);
+    
   }
 
   @Get('fetch')

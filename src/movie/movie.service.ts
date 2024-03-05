@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { HttpService } from '@nestjs/axios';
-import { ConfigService } from '@nestjs/config';
+
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
+import { InjectModel } from '@nestjs/mongoose';
+import { Movie } from './schemas/movie.schema';
+import { Model } from 'mongoose';
+
 
 
 @Injectable()
 export class MovieService {
 
-  constructor(private httpService: HttpService, private configService: ConfigService) {}
+  constructor(@InjectModel(Movie.name) private movieModel: Model<Movie>, private httpService: HttpService) {}
   
   async fetchMoviesTmdb() {
     try {
@@ -17,13 +21,23 @@ export class MovieService {
     } catch (error) {
       console.error(error)
     }
-    
-    
-     
   }
 
-  save(createMovieDto: CreateMovieDto) {
-    return 'This action adds a new movie';
+  async save (createMovieDto: CreateMovieDto): Promise<Movie> {
+    
+    
+     const dto = this.mapCreateMovieDtoToEntity(createMovieDto);
+    try {
+      const newMovie = await this.movieModel.create(dto);
+      console.log(newMovie);
+      return newMovie;
+    } catch (error) {
+      console.error('Error creating movie:', error);
+    }
+    
+    
+
+  
   }
 
   findAll() {
@@ -37,4 +51,19 @@ export class MovieService {
   remove(id: number) {
     return `This action removes a #${id} movie`;
   }
+
+   mapCreateMovieDtoToEntity = (createMovieDto: CreateMovieDto): Movie => {
+    const dto = {
+      name: createMovieDto.original_title,
+      overview: createMovieDto.overview,
+      popularity: createMovieDto.popularity,
+      voteAverage: createMovieDto.vote_average,
+      voteCount: createMovieDto.vote_count,
+      releaseDate: createMovieDto.release_date,
+      genres: createMovieDto.genres,
+    }
+    return dto;
+
+  }
+  
 }
