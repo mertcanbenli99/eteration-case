@@ -1,7 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
-
 
 @Controller('movie')
 export class MovieController {
@@ -10,12 +17,11 @@ export class MovieController {
   @Post()
   async save(@Body() createMovieDto: CreateMovieDto) {
     return await this.movieService.save(createMovieDto);
-    
   }
 
   @Get('fetch')
   fetchMovies() {
-    return this.movieService.fetchMoviesTmdb()
+    return this.movieService.fetchMoviesTmdb();
   }
 
   @Get()

@@ -1,40 +1,33 @@
-import {Prop,  Schema,  SchemaFactory} from "@nestjs/mongoose"
-import { CreateMovieDto } from "../dto/create-movie.dto";
-
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { CreateMovieDto } from '../dto/create-movie.dto';
 
 export interface Genre {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
-
 
 @Schema()
-export class Movie   {
-    
-    @Prop({required: true})
-    name: string;
+export class Movie {
+  @Prop({ required: true })
+  name: string;
 
-    @Prop()
-    overview: string;
+  @Prop()
+  overview: string;
 
-    @Prop()
-    popularity: number;
+  @Prop()
+  popularity: number;
 
-    @Prop()
-    voteAverage: number;
+  @Prop()
+  voteAverage: number;
 
-    @Prop()
-    voteCount: number;
-    
-    @Prop()
-    releaseDate: string;
+  @Prop()
+  voteCount: number;
 
-    @Prop()
-    genres: Genre[]
+  @Prop()
+  releaseDate: string;
 
- 
+  @Prop()
+  genres: Genre[];
 }
 
-
-
-export const MovieSchema = SchemaFactory.createForClass(Movie)
+export const MovieSchema = SchemaFactory.createForClass(Movie);
