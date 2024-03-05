@@ -12,6 +12,11 @@ export class MovieController {
     return this.movieService.save(createMovieDto);
   }
 
+  @Get('fetch')
+  fetchMovies() {
+    return this.movieService.fetchMoviesTmdb()
+  }
+
   @Get()
   findAll() {
     return this.movieService.findAll();
