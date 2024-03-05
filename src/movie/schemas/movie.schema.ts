@@ -1,10 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { CreateMovieDto } from '../dto/create-movie.dto';
-
-export interface Genre {
-  id: number;
-  name: string;
-}
+import { Genre } from '../interfaces/genres';
 
 @Schema()
 export class Movie {
