@@ -6,33 +6,14 @@ import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { InjectModel } from '@nestjs/mongoose';
 import { Movie } from './schemas/movie.schema';
 import { Model } from 'mongoose';
+import { TmdbService } from 'src/tmdb/tmdb.service';
 
 @Injectable()
 export class MovieService {
   constructor(
     @InjectModel(Movie.name) private movieModel: Model<Movie>,
-    private httpService: HttpService,
+    private tmdbService: TmdbService,
   ) {}
-
-  async fetchMoviesTmdb() {
-    try {
-      const response = await lastValueFrom(
-        this.httpService.get('https://api.themoviedb.org/3/discover/movie', {
-          params: {
-            api_key: process.env.TMDB_API_KEY,
-            sort_by: 'release_date.asc',
-            'vote_count.gte': 1500,
-            'vote_average.gte': 8.4,
-            watch_region: 'TR',
-            with_watch_provider: 8,
-          },
-        }),
-      );
-      return response.data;
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   async save(createMovieDto: CreateMovieDto): Promise<Movie> {
     const dto = this.mapCreateMovieDtoToEntity(createMovieDto);
@@ -41,8 +22,17 @@ export class MovieService {
     return newMovie;
   }
 
-  findAll() {
-    return `This action returns all movie`;
+  async fetchAndPersistMovies(): Promise<CreateMovieDto[]> {
+    const movies = await this.tmdbService.getMovies();
+
+    for (const movie of movies) {
+      await this.save(movie);
+    }
+    return movies;
+  }
+
+  async findAll() {
+    return await this.movieModel.find();
   }
 
   findOne(id: number) {

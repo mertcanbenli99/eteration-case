@@ -21,7 +21,7 @@ export class MovieController {
 
   @Get('fetch')
   fetchMovies() {
-    return this.movieService.fetchMoviesTmdb();
+    return this.movieService.fetchAndPersistMovies();
   }
 
   @Get()
