@@ -1,9 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Movie } from './schemas/movie.schema';
-import { Model } from 'mongoose';
-import { TmdbService } from 'src/tmdb/tmdb.service';
+import mongoose, { Model } from 'mongoose';
+import { TmdbService } from '../tmdb/tmdb.service';
 
 @Injectable()
 export class MovieService {
@@ -37,9 +41,13 @@ export class MovieService {
   }
 
   async findById(id: string) {
-    const movie = await this.movieModel.findOne({ id });
+    const isValidId = mongoose.isValidObjectId(id);
+    if (!isValidId) {
+      throw new BadRequestException('Invalid id');
+    }
+    const movie = await this.movieModel.findById(id);
     if (!movie) {
-      throw new BadRequestException();
+      throw new NotFoundException('Resource not found');
     }
     return movie;
   }

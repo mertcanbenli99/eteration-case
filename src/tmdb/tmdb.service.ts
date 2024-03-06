@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
-import { TmdbOptions, defaultOptions } from 'src/tmdb/interfaces/tmdb.options';
+import { lastValueFrom } from 'rxjs';
+import { defaultOptions } from '../tmdb/interfaces/tmdb.options';
 import { CreateMovieDto } from 'src/movie/dto/create-movie.dto';
 
 @Injectable()

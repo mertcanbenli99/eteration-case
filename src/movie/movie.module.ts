@@ -3,7 +3,7 @@ import { MovieService } from './movie.service';
 import { MovieController } from './movie.controller';
 import { HttpModule } from '@nestjs/axios';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Movie, MovieSchema } from './schemas/movie.schema';
+import { MovieSchema } from './schemas/movie.schema';
 import { TmdbModule } from 'src/tmdb/tmdb.module';
 
 @Module({
