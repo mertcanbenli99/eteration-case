@@ -6,7 +6,7 @@ import {
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Movie } from './schemas/movie.schema';
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model, isValidObjectId } from 'mongoose';
 import { TmdbService } from '../tmdb/tmdb.service';
 
 @Injectable()
@@ -18,8 +18,11 @@ export class MovieService {
 
   async save(createMovieDto: CreateMovieDto): Promise<Movie> {
     const dto = this.mapCreateMovieDtoToEntity(createMovieDto);
-    const newMovie = await this.movieModel.create(dto);
-    return newMovie;
+    const movie = this.movieModel.findOne({ movieId: dto.movieId });
+    if (movie) {
+      throw new BadRequestException('Resource Already Exists');
+    }
+    return await this.movieModel.create(dto);
   }
 
   async fetchAndPersistMovies(): Promise<CreateMovieDto[]> {
@@ -53,11 +56,16 @@ export class MovieService {
   }
 
   async removeById(id: string) {
-    const movie = await this.movieModel.findOne({ id });
-    if (!movie) {
-      throw new BadRequestException();
+    const isValidId = mongoose.isValidObjectId(id);
+    if (!isValidId) {
+      throw new BadRequestException('Invalid id');
     }
-    return await this.movieModel.findOneAndDelete({ id });
+
+    const movie = await this.movieModel.findByIdAndDelete(id);
+    if (!movie) {
+      throw new NotFoundException('Resource not found');
+    }
+    return movie;
   }
 
   mapCreateMovieDtoToEntity = (createMovieDto: CreateMovieDto): Movie => {

@@ -6,6 +6,7 @@ import { Movie } from './schemas/movie.schema';
 import mongoose, { Model } from 'mongoose';
 import { TmdbService } from '../tmdb/tmdb.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { CreateMovieDto } from './dto/create-movie.dto';
 
 describe('MovieService', () => {
   let movieService: MovieService;
@@ -37,6 +38,9 @@ describe('MovieService', () => {
   const mockMovieService = {
     findById: jest.fn(),
     findOne: jest.fn(),
+    find: jest.fn(),
+    findByIdAndDelete: jest.fn(),
+    create: jest.fn(),
   };
   const mockTmdbService = {
     getMovies: jest.fn(),
@@ -62,6 +66,60 @@ describe('MovieService', () => {
 
     movieService = moduleRef.get<MovieService>(MovieService);
     model = moduleRef.get<Model<Movie>>(getModelToken(Movie.name));
+  });
+
+  describe('save', () => {
+    it('creates a new movie entity', async () => {
+      const newMovie: CreateMovieDto = {
+        original_title: 'Apocalypse Now',
+        overview: 'Thrilling',
+        popularity: 5,
+        release_date: '28-09-1999',
+        vote_average: 7,
+        vote_count: 1500,
+        id: 5432,
+        genres: [{ id: 1, name: 'aaa' }],
+      };
+      const response = await movieService.save(newMovie);
+      console.log(response);
+
+      await expect(movieService.save(newMovie)).resolves.toBeInstanceOf(
+        mongoose.Document,
+      );
+      expect(movieService.save).toHaveBeenCalledWith(newMovie);
+      expect(movieService.save).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('removeById', () => {
+    it('delete movie and return it', async () => {
+      jest.spyOn(model, 'findByIdAndDelete').mockResolvedValue(mockMovie);
+
+      const result = await movieService.removeById(mockMovie._id);
+
+      expect(model.findByIdAndDelete).toHaveBeenCalledWith(mockMovie._id);
+
+      expect(result).toEqual(mockMovie);
+    });
+
+    it('should throw a NotFoundException when no resource is found', async () => {
+      jest.spyOn(model, 'findById').mockResolvedValue(null);
+      await expect(movieService.findById(mockMovie._id)).rejects.toThrow(
+        NotFoundException,
+      );
+      expect(model.findById).toHaveBeenCalledWith(mockMovie._id);
+    });
+  });
+
+  // FindAllMovies
+  describe('findAll', () => {
+    it('should return all existing records in collection', async () => {
+      jest.spyOn(model, 'find').mockResolvedValue([mockMovie]);
+
+      const result = await movieService.findAll();
+      expect(result).toEqual([mockMovie]);
+      expect(model.find).toHaveBeenCalledWith();
+    });
   });
 
   // FindById
@@ -95,6 +153,3 @@ describe('MovieService', () => {
     });
   });
 });
-
-// FindAllMovies
-describe('findAll', () => {});
