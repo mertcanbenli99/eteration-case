@@ -37,11 +37,11 @@ export class MovieService {
   }
 
   async findById(id: string) {
-    const movie = await this.movieModel.findById(id);
+    const movie = await this.movieModel.findOne({ id });
     if (!movie) {
       throw new BadRequestException();
     }
-    return await this.movieModel.findById({ id });
+    return movie;
   }
 
   remove(id: number) {
