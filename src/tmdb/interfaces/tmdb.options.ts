@@ -46,4 +46,3 @@ export const defaultOptions: TmdbOptions = {
   watch_region: 'TR',
   with_watch_providers: '8',
 };
-console.log('sas');
