@@ -44,8 +44,12 @@ export class MovieService {
     return movie;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} movie`;
+  async removeById(id: string) {
+    const movie = await this.movieModel.findOne({ id });
+    if (!movie) {
+      throw new BadRequestException();
+    }
+    return await this.movieModel.findOneAndDelete({ id });
   }
 
   mapCreateMovieDtoToEntity = (createMovieDto: CreateMovieDto): Movie => {

@@ -60,7 +60,7 @@ export class MovieController {
   })
   @ApiOperation({ summary: 'Removes specified movie by id' })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.movieService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.movieService.removeById(id);
   }
 }
