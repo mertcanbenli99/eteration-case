@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { HttpService } from '@nestjs/axios';
 
@@ -35,8 +35,12 @@ export class MovieService {
     return await this.movieModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} movie`;
+  async findById(id: string) {
+    const movie = await this.movieModel.findById(id);
+    if (!movie) {
+      throw new BadRequestException();
+    }
+    return await this.movieModel.findById({ id });
   }
 
   remove(id: number) {
