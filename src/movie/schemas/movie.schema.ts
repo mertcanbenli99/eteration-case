@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Genre } from '../interfaces/genres';
 import { v4 as uuidv4 } from 'uuid';
 
-@Schema()
+@Schema({ collection: 'netflix.movies' })
 export class Movie {
   @Prop({ default: uuidv4 })
   id?: string;

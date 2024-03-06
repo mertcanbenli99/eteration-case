@@ -18,7 +18,8 @@ export class MovieService {
 
   async save(createMovieDto: CreateMovieDto): Promise<Movie> {
     const dto = this.mapCreateMovieDtoToEntity(createMovieDto);
-    const movie = this.movieModel.findOne({ movieId: dto.movieId });
+    const movie = await this.movieModel.findOne({ movieId: dto.movieId });
+
     if (movie) {
       throw new BadRequestException('Resource Already Exists');
     }
