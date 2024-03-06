@@ -1,8 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
-import { HttpService } from '@nestjs/axios';
-
-import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { InjectModel } from '@nestjs/mongoose';
 import { Movie } from './schemas/movie.schema';
 import { Model } from 'mongoose';
@@ -17,7 +14,6 @@ export class MovieService {
 
   async save(createMovieDto: CreateMovieDto): Promise<Movie> {
     const dto = this.mapCreateMovieDtoToEntity(createMovieDto);
-
     const newMovie = await this.movieModel.create(dto);
     return newMovie;
   }
@@ -26,7 +22,12 @@ export class MovieService {
     const movies = await this.tmdbService.getMovies();
 
     for (const movie of movies) {
-      await this.save(movie);
+      const response = await this.tmdbService.getMovieDetails(movie.id);
+      if (!response) {
+        throw new BadRequestException();
+      }
+
+      await this.save(response);
     }
     return movies;
   }
@@ -56,6 +57,7 @@ export class MovieService {
       voteCount: createMovieDto.vote_count,
       releaseDate: createMovieDto.release_date,
       genres: createMovieDto.genres,
+      movieId: createMovieDto.id,
     };
     return dto;
   };

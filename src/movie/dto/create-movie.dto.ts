@@ -37,4 +37,8 @@ export class CreateMovieDto {
 
   @IsNotEmpty()
   genres: Genre[];
+
+  @IsNotEmpty()
+  @IsNumber()
+  id: number;
 }

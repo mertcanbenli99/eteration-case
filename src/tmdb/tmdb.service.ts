@@ -1,27 +1,40 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { lastValueFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { TmdbOptions, defaultOptions } from 'src/tmdb/interfaces/tmdb.options';
 import { CreateMovieDto } from 'src/movie/dto/create-movie.dto';
 
 @Injectable()
 export class TmdbService {
   constructor(private httpService: HttpService) {}
 
-  async getMovies(): Promise<CreateMovieDto[]> {
+  async getMovies(options = defaultOptions): Promise<CreateMovieDto[]> {
     try {
       const response = await lastValueFrom(
         this.httpService.get('https://api.themoviedb.org/3/discover/movie', {
           params: {
             api_key: 'ebb7c95eee29a5e273ddcb68dc12b372',
-            sort_by: 'release_date.asc',
-            'vote_count.gte': 1500,
-            'vote_average.gte': 8.4,
-            watch_region: 'TR',
-            with_watch_providers: '8',
+            ...options,
           },
         }),
       );
       return response.data.results;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getMovieDetails(movieId: number): Promise<CreateMovieDto> {
+    try {
+      const response = await lastValueFrom(
+        this.httpService.get(`https://api.themoviedb.org/3/movie/${movieId}`, {
+          params: {
+            api_key: 'ebb7c95eee29a5e273ddcb68dc12b372',
+          },
+        }),
+      );
+
+      return response.data;
     } catch (error) {
       console.error(error);
     }

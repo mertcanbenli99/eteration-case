@@ -23,6 +23,9 @@ export class Movie {
 
   @Prop()
   genres: Genre[];
+
+  @Prop({ unique: true, required: true })
+  movieId: number;
 }
 
 export const MovieSchema = SchemaFactory.createForClass(Movie);
