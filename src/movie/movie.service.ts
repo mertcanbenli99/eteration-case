@@ -69,7 +69,7 @@ export class MovieService {
     return movie;
   }
 
-  mapCreateMovieDtoToEntity = (createMovieDto: CreateMovieDto): Movie => {
+  mapCreateMovieDtoToEntity = (createMovieDto: CreateMovieDto) => {
     const dto = {
       name: createMovieDto.original_title,
       overview: createMovieDto.overview,

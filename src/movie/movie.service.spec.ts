@@ -31,7 +31,7 @@ describe('MovieService', () => {
         name: 'Crime',
       },
     ],
-    movieId: 680,
+    movieId: 5432,
     id: 'c17f39ab-86ae-4ade-ac76-c5150f826352',
     __v: 0,
   };
@@ -40,7 +40,8 @@ describe('MovieService', () => {
     findOne: jest.fn(),
     find: jest.fn(),
     findByIdAndDelete: jest.fn(),
-    create: jest.fn(),
+    save: jest.fn(),
+    mapCreateMovieDtoToEntity: jest.fn(),
   };
   const mockTmdbService = {
     getMovies: jest.fn(),
@@ -80,14 +81,26 @@ describe('MovieService', () => {
         id: 5432,
         genres: [{ id: 1, name: 'aaa' }],
       };
-      const response = await movieService.save(newMovie);
-      console.log(response);
 
-      await expect(movieService.save(newMovie)).resolves.toBeInstanceOf(
-        mongoose.Document,
+      await expect(movieService.save(newMovie)).resolves.toBeInstanceOf(Movie);
+    });
+
+    it('throws a badRequestError if duplicate movieId is inserted', async () => {
+      jest.spyOn(model, 'findOne').mockResolvedValue(mockMovie);
+
+      const newMovie: CreateMovieDto = {
+        original_title: 'Apocalypse Now',
+        overview: 'Thrilling',
+        popularity: 5,
+        release_date: '28-09-1999',
+        vote_average: 7,
+        vote_count: 1500,
+        id: 5432,
+        genres: [{ id: 1, name: 'aaa' }],
+      };
+      expect(movieService.mapCreateMovieDtoToEntity).toHaveBeenCalledWith(
+        newMovie,
       );
-      expect(movieService.save).toHaveBeenCalledWith(newMovie);
-      expect(movieService.save).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -118,6 +131,13 @@ describe('MovieService', () => {
 
       const result = await movieService.findAll();
       expect(result).toEqual([mockMovie]);
+      expect(model.find).toHaveBeenCalledWith();
+    });
+    it('should return an empty array if there are no records', async () => {
+      jest.spyOn(model, 'find').mockResolvedValue([]);
+
+      const result = await movieService.findAll();
+      expect(result).toEqual([]);
       expect(model.find).toHaveBeenCalledWith();
     });
   });
