@@ -31,6 +31,7 @@ export class TmdbService {
       return response.data.results;
     } catch (error) {
       console.error(error);
+      throw error;
     }
   }
 
@@ -47,6 +48,7 @@ export class TmdbService {
       return response.data;
     } catch (error) {
       console.error(error);
+      throw error;
     }
   }
 }

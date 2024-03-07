@@ -1,12 +1,12 @@
 import { getModelToken } from '@nestjs/mongoose';
-import { MovieController } from './movie.controller';
-import { MovieService } from './movie.service';
+import { MovieController } from '../movie.controller';
+import { MovieService } from '../movie.service';
 import { Test } from '@nestjs/testing';
-import { Movie } from './schemas/movie.schema';
+import { Movie } from '../schemas/movie.schema';
 import mongoose, { Model } from 'mongoose';
-import { TmdbService } from '../tmdb/tmdb.service';
+import { TmdbService } from '../../tmdb/tmdb.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { CreateMovieDto } from './dto/create-movie.dto';
+import { CreateMovieDto } from '../dto/create-movie.dto';
 
 describe('MovieService', () => {
   let movieService: MovieService;
@@ -144,7 +144,7 @@ describe('MovieService', () => {
 
   // FindById
   describe('findById', () => {
-    it('should find and return a book by ID', async () => {
+    it('should find and return a movie by ID', async () => {
       jest.spyOn(model, 'findById').mockResolvedValue(mockMovie);
       const result = await movieService.findById(mockMovie._id);
       expect(model.findById).toHaveBeenCalledWith(mockMovie._id);
