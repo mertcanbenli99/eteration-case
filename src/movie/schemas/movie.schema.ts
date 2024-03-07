@@ -11,22 +11,22 @@ export class Movie {
   name: string;
 
   @Prop()
-  overview: string;
+  overview?: string;
 
   @Prop()
-  popularity: number;
+  popularity?: number;
 
   @Prop()
-  voteAverage: number;
+  voteAverage?: number;
 
   @Prop()
-  voteCount: number;
+  voteCount?: number;
 
   @Prop()
-  releaseDate: string;
+  releaseDate?: string;
 
   @Prop()
-  genres: Genre[];
+  genres?: Genre[];
 
   @Prop({ unique: true, required: true })
   movieId: number;

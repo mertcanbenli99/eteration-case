@@ -1,6 +1,7 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Genre } from '../interfaces/genres';
 import { ApiProperty } from '@nestjs/swagger';
+import { Optional } from '@nestjs/common';
 
 export class CreateMovieDto {
   @ApiProperty({
@@ -15,29 +16,31 @@ export class CreateMovieDto {
     description: 'Summary of the movie',
     example: 'Mind-bending thriller',
   })
-  @IsNotEmpty()
   @IsString()
-  overview: string;
+  overview?: string;
 
-  @IsNotEmpty()
   @IsNumber()
-  popularity: number;
+  @IsOptional()
+  popularity?: number;
 
-  @IsNotEmpty()
   @IsNumber()
-  vote_average: number;
+  @IsOptional()
+  vote_average?: number;
 
-  @IsNotEmpty()
   @IsNumber()
-  vote_count: number;
+  @IsOptional()
+  vote_count?: number;
 
-  @IsNotEmpty()
   @IsString()
-  release_date: string;
+  @IsOptional()
+  release_date?: string;
 
-  @IsNotEmpty()
-  genres: Genre[];
+  genres?: Genre[];
 
+  @ApiProperty({
+    description: ' Corresponds to id of movie from tmdb',
+    example: 442,
+  })
   @IsNotEmpty()
   @IsNumber()
   id: number;
