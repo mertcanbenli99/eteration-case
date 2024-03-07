@@ -4,7 +4,7 @@ import { MovieController } from './movie.controller';
 import { HttpModule } from '@nestjs/axios';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MovieSchema } from './schemas/movie.schema';
-import { TmdbModule } from 'src/tmdb/tmdb.module';
+import { TmdbModule } from '../tmdb/tmdb.module';
 
 @Module({
   imports: [
