@@ -57,3 +57,14 @@ $
 ## Swagger
 
 Run the service and hit to https://localhost:3000/api to observe endpoints
+
+## Endpoints
+# GET /movie /movies/${id}
+ Returns all movies and specified movieById
+# POST /movie 
+ Creates a movie
+# DELETE /movie/${id}
+  Deletes a movie with specified id
+# GET /movie/fetch TMDB
+  Fetches and persists movies from tmdb
+
