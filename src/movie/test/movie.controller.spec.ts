@@ -1,7 +1,7 @@
-import { MovieController } from './movie.controller';
-import { MovieService } from './movie.service';
+import { MovieController } from '../movie.controller';
+import { MovieService } from '../movie.service';
 import { Test } from '@nestjs/testing';
-import { CreateMovieDto } from './dto/create-movie.dto';
+import { CreateMovieDto } from '../dto/create-movie.dto';
 
 describe('MovieController', () => {
   let movieService: MovieService;

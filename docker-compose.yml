@@ -1,32 +1,29 @@
-
 services:
-    backend:
-      build:
-        dockerfile: dockerfile
-        context: .
-        target: development
-      container_name: eteration_case
-      environment:
-        MONGO_URI: 'mongodb://mongo_container:27017'
-      depends_on:
-        - database
-      restart: on-failure
-      ports:
-       - "3000:3000"
-      command: npm run start:dev
-      volumes:
-       - .:/usr/src/app
-      
-       
-    database:
-      container_name: mongo_container
-      image: mongo
-      volumes:
-        - "./mongodb:/data/db"
-      restart: always
-      ports: 
-      - "27017:27017"
+  backend:
+    build:
+      dockerfile: dockerfile
+      context: .
+      target: development
+    container_name: eteration_case
+    environment:
+      MONGO_URI: 'mongodb://mongo_container:27017'
+    depends_on:
+      - database
+    restart: on-failure
+    ports:
+      - '3000:3000'
+    command: npm run start:dev
+    volumes:
+      - .:/usr/src/app
+
+  database:
+    container_name: mongo_container
+    image: mongo
+    volumes:
+      - './mongodb:/data/db'
+    restart: always
+    ports:
+      - '27017:27017'
 
 volumes:
-  mongodb: {
-  }
+  mongodb: {}

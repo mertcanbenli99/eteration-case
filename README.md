@@ -32,8 +32,11 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
 ## Docker and Docker Compose
+
 A multi-stage dockerfile is provided for both development and production purposes
+
 ```bash
 # Start backend and mongodb service
 $ docker compose up
@@ -44,3 +47,4 @@ $ docker image build -t eteration-case
 
 
 
+```
